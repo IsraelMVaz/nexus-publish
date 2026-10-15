@@ -32,10 +32,24 @@ export default function Home() {
         body: JSON.stringify({ channelId: selectedChannel, tema: tema.trim() }),
       });
 
-      const data = await res.json();
+      const text = await res.text();
+      let data: any;
+
+      try {
+        data = JSON.parse(text);
+      } catch {
+        throw new Error(
+          text?.slice(0, 200) ||
+            "Resposta inválida do servidor. Tente novamente em alguns segundos."
+        );
+      }
 
       if (!res.ok) {
         throw new Error(data.details || data.error || "Erro ao gerar roteiro");
+      }
+
+      if (!data.roteiro) {
+        throw new Error("Roteiro não foi gerado. Tente novamente.");
       }
 
       setResultado({
