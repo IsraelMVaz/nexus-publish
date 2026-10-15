@@ -20,7 +20,7 @@ export async function POST(req: Request) {
       return Response.json({ error: "Canal inválido" }, { status: 400 });
     }
 
-    const model = google("gemini-2.0-flash");
+    const model = google("gemini-3.8-flash");
 
     const { text } = await generateText({
       model,
@@ -36,7 +36,7 @@ Gere o roteiro completo e pronto para narração para o canal "${channel.name}".
       success: true,
       channel: channel.name,
       tema,
-      model: "gemini-2.0-flash",
+      model: "gemini-3.8-flash",
       roteiro: text,
     });
   } catch (error: any) {
