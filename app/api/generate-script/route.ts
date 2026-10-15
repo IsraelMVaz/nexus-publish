@@ -1,4 +1,3 @@
-import { openai } from "@ai-sdk/openai";
 import { google } from "@ai-sdk/google";
 import { generateText } from "ai";
 import { getChannel, type ChannelId } from "@/lib/channels";
@@ -21,11 +20,7 @@ export async function POST(req: Request) {
       return Response.json({ error: "Canal inválido" }, { status: 400 });
     }
 
-    // Usa GPT-4o para canais em PT e Gemini para canais em EN (conforme combinado)
-    const useGemini = channel.language === "en";
-    const model = useGemini
-      ? google("gemini-1.5-pro")
-      : openai("gpt-4o");
+    const model = google("gemini-1.5-pro");
 
     const { text } = await generateText({
       model,
@@ -41,7 +36,7 @@ Gere o roteiro completo e pronto para narração para o canal "${channel.name}".
       success: true,
       channel: channel.name,
       tema,
-      model: useGemini ? "gemini-1.5-pro" : "gpt-4o",
+      model: "gemini-1.5-pro",
       roteiro: text,
     });
   } catch (error: any) {
